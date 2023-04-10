@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: asteroid-test-flask-service
+spec:
+  type: ClusterIP
+  selector:
+    app: asteroid-test-flask
+    username: tagower
+    env: test
+  ports:
+  - name: asteroid-flask-port
+    port: 5000
+    targetPort: 5000

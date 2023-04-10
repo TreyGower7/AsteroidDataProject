@@ -1,0 +1,18 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: asteroid-test-redis-service
+  labels:
+    username: tagower
+    env: test
+spec:
+  type: ClusterIP
+  selector:
+    app: asteroid-test-redis
+    username: tagower
+    env: test
+  ports:
+  - name: asteroid-redis-port
+    port: 6379
+    targetPort: 6379
