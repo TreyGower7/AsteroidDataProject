@@ -1,0 +1,26 @@
+---
+version: "3"
+
+services:
+    redis-db:
+        image: redis:7
+        ports:
+            - 6379:6379
+        volumes:
+            - ./data:/data
+        user: "1000:1000"
+        command: redis-server
+    flask-app:
+        environment:
+          - REDIS_HOST= "127.0.0.1"
+        build:
+            context: ./
+            dockerfile: ./Dockerfile
+        depends_on:
+            - redis-db
+        imagePullPolicy: Always
+        image: tagower/asteroid_stats:final
+        ports:
+            - 5000:5000
+        volumes:
+            - ./config.yaml:/config.yaml

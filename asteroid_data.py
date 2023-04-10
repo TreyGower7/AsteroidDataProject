@@ -36,7 +36,6 @@ def data():
         if response.status_code == 200:
             content = response.content.decode('utf-8')
             csv_data = csv.reader(response.text.splitlines())
-            global keys
             keys = next(csv_data)
             data = [dict(zip(keys, row)) for row in csv_data]
             rd.set('ast_data', json.dumps(data))

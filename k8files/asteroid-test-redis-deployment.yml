@@ -1,0 +1,30 @@
+---
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+   name: asteroid-test-redis-deployment
+   labels:
+     username: tagower
+     env: test
+ spec:
+   replicas: 1
+   selector:
+     matchLabels:
+       app: asteroid-test-redis
+   template:
+     metadata:
+       labels:
+         app: asteroid-test-redis
+         username: tagower
+         env: test
+     spec:
+       containers:
+         - name: asteroid-redis
+           image: redis:7
+           volumeMounts:
+           - name: asteroid-test-data
+             mountPath: "/data"
+       volumes:
+       - name: asteroid-test-data
+         persistentVolumeClaim:
+           claimName: asteroid-test-data
