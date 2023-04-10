@@ -39,9 +39,9 @@ def data():
             keys = next(csv_data)
             data = [dict(zip(keys, row)) for row in csv_data]
             rd.set('ast_data', json.dumps(data))
-            return 'Asteroid Data Posted'
+            return 'Asteroid Data Posted\n'
         else:
-            return 'Data failed to retrieve'
+            return 'Data failed to retrieve\n'
 
 
     if request.method == 'GET':
@@ -49,10 +49,10 @@ def data():
             json_data = json.loads(rd.get('ast_data'))
             return json_data
         except:
-            return 'Data not found (use path /data with POST method to fetch it)'
+            return 'Data not found (use path /data with POST method to fetch it)\n'
     if request.method == 'DELETE':
         rd.delete('ast_data')
-        return 'Asteroid Data deleted'
+        return 'Asteroid Data deleted\n'
 
 #Other Flask Routes Start Here
 
@@ -73,7 +73,7 @@ def asteroids() -> list:
             asteroids.append(json_data[x]['name'])
         return asteroids
     except:
-       return 'Data not found (use path /data with POST method to fetch it)'
+       return 'Data not found (use path /data with POST method to fetch it)\n'
 
 @app.route('/asteroids/<string:ast_name>', methods=['GET'])
 def spec_ast(ast_name: str) -> dict:
@@ -93,6 +93,6 @@ def spec_ast(ast_name: str) -> dict:
 
         raise TypeError
     except TypeError:
-        return f'invalid hgnc_id input or no data found with error'
+        return f'invalid asteroid name or no data found with error\n'
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
