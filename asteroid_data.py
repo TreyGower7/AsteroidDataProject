@@ -75,8 +75,8 @@ def asteroids() -> list:
     except:
        return 'Data not found (use path /data with POST method to fetch it)'
 
-@app.route('/asteroid/<string:ast_name>', methods=['GET'])
-def genes_hgnc(ast_name: str) -> dict:
+@app.route('/asteroids/<string:ast_name>', methods=['GET'])
+def spec_ast(ast_name: str) -> dict:
     """
     Gets the asteroids data from a specific name given
     Args:
