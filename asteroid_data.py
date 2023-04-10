@@ -4,7 +4,7 @@ import json
 import requests
 import os
 import csv
-
+import matplotlib.pyplot as plt
 app = Flask(__name__)
 
 def get_redis_client():
@@ -18,6 +18,7 @@ def get_redis_client():
     redis_ip = os.environ.get("REDIS_HOST")
     return redis.Redis(host= redis_ip, port=6379,db=0,decode_responses=True)
 rd = get_redis_client()
+rd2 = redis.Redis(host = os.environ.get("REDIS_HOST"), port=6379, db=1, decode_responses=True) 
 
 @app.route('/data', methods=['GET', 'POST', 'DELETE'])
 def data():
@@ -50,6 +51,7 @@ def data():
             return json_data
         except:
             return 'Data not found (use path /data with POST method to fetch it)\n'
+
     if request.method == 'DELETE':
         rd.delete('ast_data')
         return 'Asteroid Data deleted\n'
@@ -94,5 +96,24 @@ def spec_ast(ast_name: str) -> dict:
         raise TypeError
     except TypeError:
         return f'invalid asteroid name or no data found with error\n'
+
+@app.route('/image', methods=['GET','DELETE','POST'])
+def image():
+    if request.method == 'POST': 
+        plot_data = data()
+        H = []
+        diameter = [] 
+        for x in range(len(plot_data)): 
+            H.append(plot_data[x]['H'])
+            diameter.append(plot_data[x]['diameter'])
+        plt.scatter(H, diameter, alpha=0.5) 
+        plt.xlabel('H') 
+        plt.ylabel('diameter') 
+        plt.title('H vs. diameter') 
+        plt.savefig('asteroid_graph.png') 
+        return "Image is posted\n" 
+
+ 
+	
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
