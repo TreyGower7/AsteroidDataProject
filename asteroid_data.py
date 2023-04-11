@@ -39,6 +39,8 @@ def data():
             keys = next(csv_data)
             data = [dict(zip(keys, row)) for row in csv_data]
             rd.set('ast_data', json.dumps(data))
+            global json_data
+            json_data = json.loads(rd.get('ast_data'))
             return 'Asteroid Data Posted\n'
         else:
             return 'Data failed to retrieve\n'
@@ -46,7 +48,6 @@ def data():
 
     if request.method == 'GET':
         try:
-            json_data = json.loads(rd.get('ast_data'))
             return json_data
         except:
             return 'Data not found (use path /data with POST method to fetch it)\n'
@@ -97,18 +98,18 @@ def spec_ast(ast_name: str) -> dict:
         return f'invalid asteroid name or no data found with error\n'
 
 @app.route('/image', methods=['GET','DELETE','POST'])
-def image():
-    if request.method == 'POST': 
-        plot_data = data()
+def image(): 
+    if request.method == 'POST':   
         H = []
-        diameter = [] 
-        for x in range(len(plot_data)): 
-            H.append(plot_data[x]['H'])
-            diameter.append(plot_data[x]['diameter'])
+        diameter = []
+        counter = 0 
+        for counter in range(len(json_data)): 
+            H.append(json_data[counter]['H'])
+            diameter.append(json_data[counter]['diameter'])
         plt.scatter(H, diameter, alpha=0.5) 
         plt.xlabel('H') 
-        plt.ylabel('diameter') 
-        plt.title('H vs. diameter') 
+        plt.ylabel('Diameter') 
+        plt.title('H vs. Diameter') 
         plt.savefig('asteroid_graph.png') 
         return "Image is posted\n" 
 
