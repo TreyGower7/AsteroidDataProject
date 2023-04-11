@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, send_file
 import redis
 import json
 import requests
@@ -16,9 +16,9 @@ def get_redis_client():
         the redis client with host redis_host in order to interact and get from the os to work with docker and k8s
     """
     redis_ip = os.environ.get("REDIS_HOST")
-    return redis.Redis(host= redis_ip, port=6379,db=0,decode_responses=True)
+    return redis.Redis(host= redis_ip, port=6379,db=0, decode_responses=True)
 rd = get_redis_client()
-rd2 = redis.Redis(host = os.environ.get("REDIS_HOST"), port=6379, db=1, decode_responses=True) 
+rd2 = redis.Redis(host = os.environ.get("REDIS_HOST"), port=6379, db=1) 
 
 @app.route('/data', methods=['GET', 'POST', 'DELETE'])
 def data():
@@ -48,15 +48,12 @@ def data():
 
     if request.method == 'GET':
         try:
-            if json_data == {}: 
-                return "Post the data\n" 
-            else:
                 return json_data
         except:
             return 'Data not found (use path /data with POST method to fetch it)\n'
 
     if request.method == 'DELETE':
-        json_data = {} 
+        del json_data 
         rd.delete('ast_data')
         return 'Asteroid Data deleted\n'
 
@@ -105,8 +102,8 @@ def spec_ast(ast_name: str) -> dict:
 
 @app.route('/image', methods=['GET','DELETE','POST'])
 def image():
-    try:
-        if request.method == 'POST':   
+    if request.method == 'POST':   
+        try:
             H = []
             diameter = []
             counter = 0 
@@ -118,15 +115,26 @@ def image():
             plt.ylabel('Diameter (km)') 
             plt.title('H vs. Diameter') 
             plt.savefig('asteroid_graph.png') 
-            file_bytes = open('./final_project/AsteroidDataProject/asteroid_graph.png', 'rb').read()
+            file_bytes = open('./asteroid_graph.png', 'rb').read()
             rd2.set('key', file_bytes)
             return "Image is posted\n" 
-    except TypeError: 
-        return "Make sure the data has been posted\n" 
-    except NameError:
-        return "Make sure the data has been posted\n"
+        except TypeError: 
+            return "Make sure the data has been posted\n" 
+        except NameError:
+            return "Make sure the data has been posted\n"
 
- 
-	
+    if request.method == 'GET':
+        try:
+            path = './asteroid_graph.png'
+            with open(path, 'wb') as f: 
+                f.write(rd2.get('key'))
+            return send_file(path, mimetype='image/png', as_attachment=True) 
+        except TypeError:
+            return "Post the data first and then post the image to use this function\n"
+
+    if request.method == 'DELETE': 
+        rd2.delete('key') 
+        return "Graph was deleted\n"
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
