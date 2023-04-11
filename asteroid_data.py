@@ -53,10 +53,12 @@ def data():
             return 'Data not found (use path /data with POST method to fetch it)\n'
 
     if request.method == 'DELETE':
-        del json_data 
-        rd.delete('ast_data')
-        return 'Asteroid Data deleted\n'
-
+        try:
+            del json_data 
+            rd.delete('ast_data')
+            return 'Asteroid Data deleted\n'
+        except NameError:
+            return 'Data already deleted\n'
 #Other Flask Routes Start Here
 
 @app.route('/asteroids', methods=['GET'])
@@ -70,13 +72,10 @@ def asteroids() -> list:
     """
     try:
         asteroids = []
-        json_data = data()
-        if json_data == {}: 
-            return "Post the data\n"
-        else: 
-            for x in range(len(json_data)):
-                asteroids.append(json_data[x]['name'])
-            return asteroids
+        json_data = data() 
+        for x in range(len(json_data)):
+            asteroids.append(json_data[x]['name'])
+        return asteroids
     except:
        return 'Data not found (use path /data with POST method to fetch it)\n'
 
