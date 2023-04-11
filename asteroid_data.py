@@ -113,7 +113,7 @@ def image():
             plt.xlabel('H') 
             plt.ylabel('Diameter (km)') 
             plt.title('H vs. Diameter') 
-            plt.savefig('asteroid_graph.png') 
+            plt.savefig('asteroid_graph.png')
             file_bytes = open('./asteroid_graph.png', 'rb').read()
             rd2.set('key', file_bytes)
             return "Image is posted\n" 
