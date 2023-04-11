@@ -39,7 +39,7 @@ def data():
             keys = next(csv_data)
             data = [dict(zip(keys, row)) for row in csv_data]
             rd.set('ast_data', json.dumps(data))
-            return 'Asteroid Data Posted\n'
+                return 'Asteroid Data Posted\n'
         else:
             return 'Data failed to retrieve\n'
 
@@ -98,14 +98,14 @@ def spec_ast(ast_name: str) -> dict:
 
 @app.route('/image', methods=['GET','DELETE','POST'])
 def image():
-    if request.method == 'POST': 
-        plot_data = data()
-        H = []
-        diameter = [] 
-        for x in range(len(plot_data)): 
-            H.append(plot_data[x]['H'])
-            diameter.append(plot_data[x]['diameter'])
-        plt.scatter(H, diameter, alpha=0.5) 
+    if request.method == 'POST':
+        plot_data = json_data
+        Hs = []
+        diameters = []
+        for x in range(len(plot_data)):
+            diameters.append(plot_data[x]['diameter'])
+        return [diameters]
+        plt.scatter(Hs, diameters, alpha=0.5) 
         plt.xlabel('H') 
         plt.ylabel('diameter') 
         plt.title('H vs. diameter') 
