@@ -105,19 +105,21 @@ def spec_ast(ast_name: str) -> dict:
 def image():
     if request.method == 'POST':   
         try:
+            plot_data = json_data
             H = []
             name = []
             counter = 0 
-            for counter in range(len(json_data)): 
-                H.append(json_data[counter]['H'])
-                name.append(json_data[counter]['name']) 
+            sorted_data = sorted(plot_data, key=lambda x: float(x['H']), reverse=False) 
+            for counter in range(len(sorted_data)): 
+                H.append(sorted_data[counter]['H'])
+                name.append(sorted_data[counter]['name']) 
                 if counter == 10: 
                     break 
             plt.figure(figsize=(10,10))
             plt.scatter(name,H) 
-            plt.xlabel('Names of asteroids') 
+            plt.xlabel('Names of asteroid') 
             plt.ylabel('H (Brightness)') 
-            plt.title('Brightness of each asteroid (1st 10 asteroids)')
+            plt.title('Lowest 10 Brightness of the asteroids')
             plt.savefig('asteroid_graph.png')
             file_bytes = open('./asteroid_graph.png', 'rb').read()
             rd2.set('key', file_bytes)
