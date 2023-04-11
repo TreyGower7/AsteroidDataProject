@@ -5,6 +5,8 @@ import requests
 import os
 import csv
 import matplotlib.pyplot as plt
+import numpy as np
+
 app = Flask(__name__)
 
 def get_redis_client():
@@ -109,10 +111,12 @@ def image():
             for counter in range(len(json_data)): 
                 H.append(json_data[counter]['H'])
                 diameter.append(json_data[counter]['diameter'])
+            plt.xticks(np.arange(0,5,1))
+            plt.yticks(np.arange(0,300,50))  
             plt.scatter(H, diameter, alpha=0.5) 
             plt.xlabel('H') 
             plt.ylabel('Diameter (km)') 
-            plt.title('H vs. Diameter') 
+            plt.title('H vs. Diameter')
             plt.savefig('asteroid_graph.png')
             file_bytes = open('./asteroid_graph.png', 'rb').read()
             rd2.set('key', file_bytes)
