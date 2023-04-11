@@ -106,17 +106,18 @@ def image():
     if request.method == 'POST':   
         try:
             H = []
-            diameter = []
+            name = []
             counter = 0 
             for counter in range(len(json_data)): 
                 H.append(json_data[counter]['H'])
-                diameter.append(json_data[counter]['diameter'])
-            plt.xticks(np.arange(0,5,1))
-            plt.yticks(np.arange(0,300,50))  
-            plt.scatter(H, diameter, alpha=0.5) 
-            plt.xlabel('H') 
-            plt.ylabel('Diameter (km)') 
-            plt.title('H vs. Diameter')
+                name.append(json_data[counter]['name']) 
+                if counter == 10: 
+                    break 
+            plt.figure(figsize=(10,10))
+            plt.scatter(name,H) 
+            plt.xlabel('Names of asteroids') 
+            plt.ylabel('H (Brightness)') 
+            plt.title('Brightness of each asteroid (1st 10 asteroids)')
             plt.savefig('asteroid_graph.png')
             file_bytes = open('./asteroid_graph.png', 'rb').read()
             rd2.set('key', file_bytes)
