@@ -48,11 +48,15 @@ def data():
 
     if request.method == 'GET':
         try:
-            return json_data
+            if json_data == {}: 
+                return "Post the data\n" 
+            else:
+                return json_data
         except:
             return 'Data not found (use path /data with POST method to fetch it)\n'
 
     if request.method == 'DELETE':
+        json_data = {} 
         rd.delete('ast_data')
         return 'Asteroid Data deleted\n'
 
@@ -70,10 +74,12 @@ def asteroids() -> list:
     try:
         asteroids = []
         json_data = data()
-
-        for x in range(len(json_data)):
-            asteroids.append(json_data[x]['name'])
-        return asteroids
+        if json_data == {}: 
+            return "Post the data\n"
+        else: 
+            for x in range(len(json_data)):
+                asteroids.append(json_data[x]['name'])
+            return asteroids
     except:
        return 'Data not found (use path /data with POST method to fetch it)\n'
 
@@ -98,20 +104,27 @@ def spec_ast(ast_name: str) -> dict:
         return f'invalid asteroid name or no data found with error\n'
 
 @app.route('/image', methods=['GET','DELETE','POST'])
-def image(): 
-    if request.method == 'POST':   
-        H = []
-        diameter = []
-        counter = 0 
-        for counter in range(len(json_data)): 
-            H.append(json_data[counter]['H'])
-            diameter.append(json_data[counter]['diameter'])
-        plt.scatter(H, diameter, alpha=0.5) 
-        plt.xlabel('H') 
-        plt.ylabel('Diameter') 
-        plt.title('H vs. Diameter') 
-        plt.savefig('asteroid_graph.png') 
-        return "Image is posted\n" 
+def image():
+    try:
+        if request.method == 'POST':   
+            H = []
+            diameter = []
+            counter = 0 
+            for counter in range(len(json_data)): 
+                H.append(json_data[counter]['H'])
+                diameter.append(json_data[counter]['diameter'])
+            plt.scatter(H, diameter, alpha=0.5) 
+            plt.xlabel('H') 
+            plt.ylabel('Diameter (km)') 
+            plt.title('H vs. Diameter') 
+            plt.savefig('asteroid_graph.png') 
+            file_bytes = open('./final_project/AsteroidDataProject/asteroid_graph.png', 'rb').read()
+            rd2.set('key', file_bytes)
+            return "Image is posted\n" 
+    except TypeError: 
+        return "Make sure the data has been posted\n" 
+    except NameError:
+        return "Make sure the data has been posted\n"
 
  
 	
