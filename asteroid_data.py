@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 from flask import Flask, request, send_file
+=======
+from flask import Flask, request, send_file 
+>>>>>>> 4d5e132f7bb302c181ee7f2b32804d9962ef0347
 import redis
 import json
 import requests
