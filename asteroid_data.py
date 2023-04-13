@@ -106,7 +106,7 @@ def spec_ast(ast_name: str) -> dict:
 def image():
     if request.method == 'POST':   
         try:
-            plot_data = json_data
+            plot_data = json.loads(rd.get('ast_data'))
             H = []
             name = []
             counter = 0 
