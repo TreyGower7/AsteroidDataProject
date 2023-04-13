@@ -24,10 +24,3 @@
            env:
            - name: REDIS_HOST
              value: "asteroid-test-redis-service"
-           volumeMounts:
-           - name: asteroid-test-data
-             mountPath: "/data"
-       volumes:
-       - name: asteroid-test-data
-         persistentVolumeClaim:
-           claimName: asteroid-test-data
