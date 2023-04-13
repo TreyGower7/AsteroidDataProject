@@ -50,7 +50,8 @@ def data():
 
     if request.method == 'GET':
         try:
-                return json_data
+            json_data = json.loads(rd.get('ast_data'))
+            return json_data
         except:
             return 'Data not found (use path /data with POST method to fetch it)\n'
 
