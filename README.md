@@ -13,7 +13,7 @@
   <p align="center">
     Project Objective
 
-The goal of this gene data mini project is to use python requests to store gene data from https://www.genenames.org/download/archive/ into a redis database.
+The goal of this Asteroid project is to use python requests to store data from https://github.com/TreyGower7/AsteroidDataProject/blob/main/ModifiedAsteroidData.csv into a redis database.
 
 
 
@@ -36,31 +36,31 @@ The goal of this gene data mini project is to use python requests to store gene 
 
 
 <!-- ABOUT THE PROJECT -->
-## About The Gene Project
-The Gene Project was mainly about learning to use redis with big sets of data integrated with Flask. The big data used is from The Human Genome Organization (HUGO) and the commitee within HUGO, being HGNC, “approves a unique and meaningful name for every gene.” This data is imported with python requests then Flask apps excute http requests to get the data and returns the data.
+## About The Asteroid Project
+
     
 ### The Files In This Repo
     
-`gene_api.py`
-the python script contains and executes the `Flask`, `redis`, and python `requests` libraries functions. The script retrieves the data from the web at https://www.genenames.org/download/archive/, then can be displayed with different paths that send http requests.
+`asteroid_data.py`
+the python script contains and executes the `Flask`, `redis`, and python `requests` libraries functions. The script retrieves the data from the web at https://github.com/TreyGower7/AsteroidDataProject/blob/main/ModifiedAsteroidData.csv, then can be displayed with different paths that send http requests.
     
 `docker-compose.yml`
 saves the user (you) from having to type in tricky commands to run the docker image. Instead it wraps the information for the docker image into one file and runs it with a simple command.
     
 `Dockerfile`
-is used to capture the docker image, the file specifies the Python version, and installs any libraries used in the python script to run the application. For the `gene_api.py` script the Dockerfile installs: `redis`, `requests`, `Flask`, and `yaml`.
+is used to capture the docker image, the file specifies the Python version, and installs any libraries used in the python script to run the application. For the `asteroid_data.py` script the Dockerfile installs: `redis`, `requests`, `Flask`, and `yaml`.
 
 `Kubernetes Files:`
     
-  `tagower-test-flask-service.yml` - Used to run the flask cluster (Runs all pods associated with the ip)
+  `asteroid-test-flask-service.yml` - Used to run the flask cluster (Runs all pods associated with the ip)
     
-  `tagower-test-flask-deployment.yml` - Provides declartive updates for flask pods
+  `asteroid-test-flask-deployment.yml` - Provides declartive updates for flask pods
     
-  `tagower-test-redis-service.yml` - Used to run the redis cluster (Runs all pods associated with the ip)
+  `asteroid-test-redis-service.yml` - Used to run the redis cluster (Runs all pods associated with the ip)
     
-  `tagower-test-redis-deployment.yml` - Provides declartive updates for redis pods
+  `asteroid-test-redis-deployment.yml` - Provides declartive updates for redis pods
     
-  `tagower-test-pvc.yml` - Persitant Volume Claim to store our data in the redis database
+  `asteroid-test-pvc.yml` - Persitant Volume Claim to store our data in the redis database
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -96,7 +96,7 @@ Running this script is extremely easy using the docker files provided to you in 
 ## Pulling a docker image
 1. docker pull request
    ```sh
-   docker pull tagower/gene_api:hw07   
+   docker pull tagower/asteroid_stats:final   
    ```
     Output: <img width="627" alt="Screenshot 2023-03-27 at 8 14 47 PM" src="https://user-images.githubusercontent.com/70235944/228101377-198115c8-3448-4efc-8094-e9f5476b130b.png">
 
@@ -114,7 +114,7 @@ Running this script is extremely easy using the docker files provided to you in 
 ## Building a docker image
 1. Build the image using included docker file
 ```sh  
-docker build -t <username>/gene_api:<yourtag> .
+docker build -t <username>/asteroid_stats:<yourtag> .
 ```
 2. Check image was created
 ```sh  
@@ -135,9 +135,9 @@ docker-compose up
 <!-- Paths & Routes -->
 ## Paths & Routes
 
-- /data (POST's (loads), GET's (returns), or DELETE's the data from HGNC from the redis database)
-- /genes (Returns a json formated list named hgnc_ids of all gene identifiers in the data set)
-- /genes/<hgnc_id> (Gets the gene data from a specific gene given an identifier key)
+- /data (POST's (loads), GET's (returns), or DELETE's the data from the redis database)
+- /asteroids (Returns a json formated list of asteroid names)
+- /asteroids/<asteroid_name> (Gets the data from a specific asteroid name given)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
  
@@ -148,25 +148,25 @@ docker-compose up
     ```sh
     curl -X POST localhost:5000/data
     ```
-      Output: Gene Data Posted
+      Output: Asteroid Data Posted
 2. Get the data from redis in json format
     ```sh
     curl localhost:5000/data
     ```
-      Output: ***Outputs same as curl localhost:5000/genes/hgnc_id except returns all ids***
+      Output: ***Outputs same as belows curl localhost:5000/asteroids/<asteroid_name> except returns all ids***
 3. Delete the data from the redis database
     ```sh
     curl -X DELETE localhost:5000/data
     ```
-      Output: Gene Data Deleted
-4. Get all hgnc_ids 
+      Output: Asteroid Data Deleted
+4. Get all asteroids
     ```sh
-    curl localhost:5000/genes
+    curl localhost:5000/asteroids
     ```
       Output: <img width="500" alt="Screenshot 2023-03-27 at 9 23 48 PM" src="https://user-images.githubusercontent.com/70235944/228111676-a901004f-2ee2-4f89-a981-d294d412620f.png">
-5. Get all data pertaining to a specific hgnc id
+5. Get all data pertaining to a specific asteroid
     ```sh
-    curl localhost:5000/genes/hgnc_id
+    curl localhost:5000/asteroids/<asteroid_name>
     ```
       Output: <img width="500" alt="Screenshot 2023-03-27 at 9 24 13 PM" src="https://user-images.githubusercontent.com/70235944/228111861-7970c198-8c78-4428-bf78-5dfb36abbcc7.png">
 
@@ -181,7 +181,7 @@ docker-compose up
 ### Using The Provided Image
 1. docker pull request
   ```sh
-   docker pull tagower/gene_api:hw07  
+   docker pull tagower/asteroid_stats:final 
    ```
 2. Refer below to 'Running Deployments' Section
   
@@ -202,11 +202,11 @@ docker-compose up
 
 2. To run the other containers taken from this github repo
   ```sh
-  kubectl apply -f tagower-test-flask-service.yml
-  kubectl apply -f tagower-test-flask-deployment.yml
-  kubectl apply -f tagower-test-redis-service.yml
-  kubectl apply -f tagower-test-redis-deployment.yml
-  kubectl apply -f tagower-test-pvc.yml
+  kubectl apply -f asteroid-test-flask-service.yml
+  kubectl apply -f asteroid-test-flask-deployment.yml
+  kubectl apply -f asteroid-test-redis-service.yml
+  kubectl apply -f asteroid-test-redis-deployment.yml
+  kubectl apply -f asteroid-test-pvc.yml
   ```
 
 3. Check that they are running 
@@ -234,13 +234,9 @@ docker-compose up
     
 <!-- What the data says -->
 ## What the Important data says
-* hgnc_id = HGNC ID. A unique ID created by the HGNC for every approved symbol. 
-* locus_group = A group name for a set of related locus types as defined by the HGNC (e.g. non-coding RNA)
-* locus_type = The locus type as defined by the HGNC (e.g. RNA, transfer)
-* location = Cytogenetic location of the gene (e.g. 2q34)
-* gene_family = Name given to a gene family or group
+
     
-***Most other data is a form of id type for specific identification within data bases***
+***Most other data values correlate to other properties of the asteroid we do not need in this project***
 
 
 
@@ -261,7 +257,7 @@ Project Link: https://github.com/TreyGower7/coe332-trey/tree/main/homework06
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-* The Human Genome Organization: [https://www.genenames.org/download/archive/]()
+* Jet Propulsion Laboratory of California Institute of Technology: [https://www.kaggle.com/datasets/sakhawat18/asteroid-dataset]()
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
