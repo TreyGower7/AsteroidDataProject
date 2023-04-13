@@ -37,7 +37,12 @@ The goal of this Asteroid project is to use python requests to store data from h
 
 <!-- ABOUT THE PROJECT -->
 ## About The Asteroid Project
-
+This project is based off of asteroid data found on https://www.kaggle.com/datasets/sakhawat18/asteroid-dataset where we 
+took values in the data set and computed some interesting properties. We specifically are interested in the H: Absolute 
+magnitude parameter, Diameter: object diameter (in km) and diameter uncertainty, Albedo: Geometric albedo, and Epoch 
+(Julian day form). Using this data and constants pulled from astrophysics, we can do calculations to find the temperature 
+of the asteroid, the Luminosity of the asteroid, the distance of the asteroid from the observers meridian, and the ability 
+to be seen by the naked eye or not.
     
 ### The Files In This Repo
     
@@ -138,7 +143,7 @@ docker-compose up
 - /data (POST's (loads), GET's (returns), or DELETE's the data from the redis database)
 - /asteroids (Returns a json formated list of asteroid names)
 - /asteroids/<asteroid_name> (Gets the data from a specific asteroid name given)
-
+- /image (POST's (loads), GET's (returns), or DELETE's the plot from a new redis database)
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
  
 
@@ -170,6 +175,16 @@ docker-compose up
     ```
       Output: <img width="500" alt="Screenshot 2023-03-27 at 9 24 13 PM" src="https://user-images.githubusercontent.com/70235944/228111861-7970c198-8c78-4428-bf78-5dfb36abbcc7.png">
 
+6. Generate plots of data into a new redis database
+    ```sh
+    curl -X POST localhost:5000/image
+    ```
+  Output: Image Posted
+  
+7. Get the plots of data (graphs only viewable in jupyter notebook or as a png on local device)
+    ```sh
+    curl localhost:5000/image
+    ```
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
   
   <!-- Kubernetes -->
@@ -230,11 +245,33 @@ docker-compose up
   ```sh
   curl <cluster_ip>:5000/<a_path>
   ```
+### Envirnomental variables
+  ***Note: we are now using environmental variable instead of hardcoded ip addresses. You still do not need to change any of the code whether you use the provided image or not. Heres what this looks like in some of the files:***
+`asteroid_data.py:` <img width="405" alt="Screenshot 2023-04-13 at 2 29 55 PM" src="https://user-images.githubusercontent.com/70235944/231863940-301195ea-de0b-4a3e-b2da-d56215bf334c.png">
+
+`docker-compose.yml:` 
+  ```sh
+  environment:
+    - REDIS_IP=<The name of your container>
+  ```
+  ***mine uses REDIS_IP=asteroidproject_redis-db_1***
+  
+  `flask-deployment:` 
+  ```sh
+  env:
+  - name: REDIS_IP
+    value: <The name of your redis service>
+  ```
+  ***mine uses REDIS_IP="asteroid-test-redis-service"***
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
     
 <!-- What the data says -->
 ## What the Important data says
-
+H: Absolute magnitude parameter (Illumination measured one astronomical unit (AU) from both the Sun and the observer) 
+Diameter: asteroids diameter (in km)
+Diameter Uncertainty
+Albedo: Geometric albedo (reflection of light off the asteroid)
+Epoch: Time (Julian day form)
     
 ***Most other data values correlate to other properties of the asteroid we do not need in this project***
 
