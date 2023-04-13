@@ -5,10 +5,10 @@
 <div align="center">
   <a href="https://github.com/TreyGower7/coe332-trey">
   <img src=https://user-images.githubusercontent.com/70235944/231852260-a794b567-d60c-49fc-a2f6-a131ac7a8809.jpg
-       alt="Logo" width="80" height="80">
+       alt="Logo" width="150" height="150">
     
 
-<h3 align="center">Say it Aint Genes (Gene Nomenclature)</h3>
+<h3 align="center">Cool Asteroid Stuff </h3>
 
   <p align="center">
     Project Objective
