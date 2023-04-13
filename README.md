@@ -248,7 +248,7 @@ docker-compose up
 
 Trey Gower - goweryert@gmail.com
 
-Project Link: https://github.com/TreyGower7/coe332-trey/tree/main/homework06
+Project Link: https://github.com/TreyGower7/AsteroidDataProject
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
