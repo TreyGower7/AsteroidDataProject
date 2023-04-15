@@ -6,6 +6,7 @@ import os
 import csv
 import matplotlib.pyplot as plt
 import numpy as np
+import math 
 
 app = Flask(__name__)
 
@@ -142,6 +143,34 @@ def image():
     if request.method == 'DELETE': 
         rd2.delete('key') 
         return "Graph was deleted\n"
+
+@app.route('/asteroids/<string:ast_name>/temp', methods=['GET'])
+def temp(ast_name: str):
+    try:
+        asteroid = spec_ast(ast_name)
+        s_knot = 1376 #w/m^2
+        albedo = float(asteroid['albedo'])  
+        boltzman = 5.67 * (10**-8) 
+        temp = float(((s_knot*(1-albedo))/(4*boltzman)) ** (1/4))   
+        awnser = {'Temp': temp, 'units': "Kelvin"} 
+        return awnser 
+    except TypeError: 
+        return "Make sure asteroid name is correct\n" 
+
+@app.route('/asteroids/<string:ast_name>/luminosity', methods=['GET'])
+def lumin(ast_name: str):
+    try:
+        asteroid = spec_ast(ast_name)
+        s_knot = 1376 #w/m^2
+        albedo = float(asteroid['albedo'])
+        boltzman = 5.67 * (10**-8)
+        temp = float(((s_knot*(1-albedo))/(4*boltzman)) ** (1/4))
+        diameter = float(asteroid['diameter'])
+        radius = diameter/2
+        luminosity = 4*math.pi*(radius**2)*boltzman*(temp ** 4)
+        return f'{luminosity} Watts\n' 
+    except TypeError:
+        return "Make sure asteroid name is correct\n"
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
