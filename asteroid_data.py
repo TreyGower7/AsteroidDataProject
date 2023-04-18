@@ -7,6 +7,7 @@ import csv
 import matplotlib.pyplot as plt
 import numpy as np
 import math 
+import xmltodict
 
 app = Flask(__name__)
 
@@ -42,8 +43,6 @@ def data():
             keys = next(csv_data)
             data = [dict(zip(keys, row)) for row in csv_data]
             rd.set('ast_data', json.dumps(data))
-            global json_data
-            json_data = json.loads(rd.get('ast_data'))
             return 'Asteroid Data Posted\n'
         else:
             return 'Data failed to retrieve\n'
@@ -52,13 +51,13 @@ def data():
     if request.method == 'GET':
         try:
             json_data = json.loads(rd.get('ast_data'))
-            return json_data
+            if json_data != {}:
+                return json_data
         except:
             return 'Data not found (use path /data with POST method to fetch it)\n'
 
     if request.method == 'DELETE':
         try:
-            del json_data 
             rd.delete('ast_data')
             return 'Asteroid Data deleted\n'
         except NameError:
@@ -92,8 +91,8 @@ def spec_ast(ast_name: str) -> dict:
     Returns:
         a dictionary (ast_data) containing all data pertaining to a specific asteroid
     """
+    ast_name= str.title(ast_name)
     try:
-
         json_data = data()
         for a_name in json_data:
             if a_name['name']  == ast_name:
@@ -106,30 +105,30 @@ def spec_ast(ast_name: str) -> dict:
 @app.route('/image', methods=['GET','DELETE','POST'])
 def image():
     if request.method == 'POST':   
-        try:
-            plot_data = json.loads(rd.get('ast_data'))
-            H = []
-            name = []
-            counter = 0 
-            sorted_data = sorted(plot_data, key=lambda x: float(x['H']), reverse=False) 
-            for counter in range(len(sorted_data)): 
-                H.append(sorted_data[counter]['H'])
-                name.append(sorted_data[counter]['name']) 
-                if counter == 10: 
-                    break 
-            plt.figure(figsize=(10,10))
-            plt.scatter(name,H) 
-            plt.xlabel('Names of asteroid') 
-            plt.ylabel('H (Brightness)') 
-            plt.title('Lowest 10 Brightness of the asteroids')
-            plt.savefig('asteroid_graph.png')
-            file_bytes = open('./asteroid_graph.png', 'rb').read()
-            rd2.set('key', file_bytes)
-            return "Image is posted\n" 
-        except TypeError: 
-            return "Make sure the data has been posted\n" 
-        except NameError:
-            return "Make sure the data has been posted\n"
+       # try:
+        plot_data = data()
+        H = []
+        name = []
+        counter = 0 
+        sorted_data = sorted(plot_data, key=lambda x: float(x['H']), reverse=False) 
+        for counter in range(len(sorted_data)): 
+            H.append(sorted_data[counter]['H'])
+            name.append(sorted_data[counter]['name']) 
+            if counter == 10: 
+                break 
+        plt.figure(figsize=(10,10))
+        plt.scatter(name,H) 
+        plt.xlabel('Names of asteroid') 
+        plt.ylabel('H (Brightness)') 
+        plt.title('Lowest 10 Brightness of the asteroids')
+        plt.savefig('asteroid_graph.png')
+        file_bytes = open('./asteroid_graph.png', 'rb').read()
+        rd2.set('key', file_bytes)
+        return "Image is posted\n" 
+       # except TypeError: 
+         #   return "Make sure the data has been posted\n" 
+       # except NameError:
+        #    return "Make sure the data has been posted\n"
 
     if request.method == 'GET':
         try:
@@ -144,8 +143,9 @@ def image():
         rd2.delete('key') 
         return "Graph was deleted\n"
 
-@app.route('/asteroids/<string:ast_name>/temp', methods=['GET'])
+@app.route('/<string:ast_name>/temp', methods=['GET'])
 def temp(ast_name: str):
+    ast_name= str.title(ast_name)
     try:
         asteroid = spec_ast(ast_name)
         s_knot = 1376 #w/m^2
@@ -157,11 +157,11 @@ def temp(ast_name: str):
     except TypeError: 
         return "Make sure asteroid name is correct\n" 
 
-@app.route('/asteroids/<string:ast_name>/luminosity', methods=['GET'])
+@app.route('/<string:ast_name>/luminosity', methods=['GET'])
 def lumin(ast_name: str):
+    ast_name= str.title(ast_name)
     try:
         asteroid = spec_ast(ast_name)
-        name = asteroid['name'] 
         s_knot = 1376 #w/m^2
         albedo = float(asteroid['albedo'])
         boltzman = 5.67 * (10**-8)
@@ -169,30 +169,36 @@ def lumin(ast_name: str):
         diameter = float(asteroid['diameter'])
         radius = diameter/2
         luminosity = 4*math.pi*(radius**2)*boltzman*(temp ** 4)
-        return f'{name} has a luminosity of {luminosity} Watts\n' 
+        return f'{ast_name} has a luminosity of {luminosity} Watts\n' 
     except TypeError:
         return "Make sure asteroid name is correct\n"
 
-@app.route('/asteroids/<string:ast_name>/visibility', methods=['GET'])
+@app.route('/<string:ast_name>/visibility', methods=['GET'])
 def visibility(ast_name: str):
+    ast_name= str.title(ast_name)
     try: 
         asteroid = spec_ast(ast_name) 
-        name = asteroid['name']
         visible = float(asteroid['H'])  
         if visible <= 6.5:  
-            return f'You can see {name} with the naked eye if it was 10 parsecs away\n'
+            return f'You can see {ast_name} with the naked eye if it was 10 parsecs away\n'
         elif visible > 6.5 and visible <=25: 
-            return f'You can see {name} with a regular telescope if it was 10 parsecs away\n' 
+            return f'You can see {ast_name} with a regular telescope if it was 10 parsecs away\n' 
         elif visible > 25 and visible <= 32: 
-            return f' You can see {name} with the Hubble telescope if it was 10 parsecs away\n' 
+            return f' You can see {ast_name} with the Hubble telescope if it was 10 parsecs away\n' 
     except TypeError: 
         return "Make sure asteroid name is correct\n" 
 
-@app.route('/asteroids/<string:ast_name>/luminosity/power/<string:city>', methods=['GET'])
-def power(ast_name: str, city:str):
+@app.route('/<string:ast_name>/power/<string:country>', methods=['GET'])
+def power(ast_name: str, country:str):
+    ast_name= str.title(ast_name)
+    country= str.title(country)
+    flag =0
     try:
+        url = 'https://raw.githubusercontent.com/TreyGower7/AsteroidDataProject/main/API_EG.USE.ELEC.KH.PC_DS2_en_xml_v2_5362092.xml'
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = xmltodict.parse(response.text)
         asteroid = spec_ast(ast_name)
-        name = asteroid['name']
         s_knot = 1376 #w/m^2
         albedo = float(asteroid['albedo'])
         boltzman = 5.67 * (10**-8)
@@ -200,57 +206,34 @@ def power(ast_name: str, city:str):
         diameter = float(asteroid['diameter'])
         radius = diameter/2
         luminosity = 4*math.pi*(radius**2)*boltzman*(temp ** 4)
+        for x in range(len(data)):
+            if country == data["Root"]["data"]["record"][x]["field"][0]["#text"]:
+                    if data["Root"]["data"]["record"][x]["field"][2]["#text"] == "2014":
+                        try:
+                            kwh = data["Root"]["data"]["record"][x]["field"][3]["#text"]
+                            break
+                        except KeyError:
+                            continue
+                        
+        return kwh
         try:
             power = luminosity/1000
-            if city == "Miami": 
-                output = power/1125
-                return f'the power generated by {name} can power {city} for {output} hours\n'
-            elif city == "Atlanta":
-                output = power/837
-                return f'the power generated by {name} can power {city} for {output} hours\n'
-            elif city == "LasVegas":
-                output = power/788
-                return f'the power generated by {name} can power Las Vegas for {output} hours\n' 
-            elif city == "NewYorkCity":
-                output = power/304
-                return f'the power generated by {name} can power New York City for {output} hours\n'
-            elif city == "Phoenix":
-                output = power/905
-                return f'the power generated by {name} can power {city} for {output} hours\n'
-            elif city == "Charlotte":
-                output = power/879
-                return f'the power generated by {name} can power {city} for {output} hours\n'
-            elif city == "LosAngeles":
-                output = power/735
-                return f'the power generated by {name} can power Los Angeles for {output} hours\n'
-            elif city == "Portland":
-                output = power/669
-                return f'the power generated by {name} can power {city} for {output} hours\n'
-            elif city == "WashingtonD.C.":
-                output = power/613
-                return f'the power generated by {name} can power Washington D.C. for {output} hours\n'
-            elif city == "Columbus":
-                output = power/608
-                return f'the power generated by {name} can power {city} for {output} hours\n'
-            elif city == "Denver":
-                output = power/475
-                return f'the power generated by {name} can power {city} for {output} hours\n'
-            elif city == "SanJose":
-                output = power/394
-                return f'the power generated by {name} can power San Jose for {output} hours\n'
-            elif city == "Chicago":
-                output = power/380
-                return f'the power generated by {name} can power {city} for {output} hours\n'
-            elif city == "SanDiego":
-                output = power/326
-                return f'the power generated by {name} can power San Diego for {output} hours\n'
-            elif city == "SanFrancisco":
-                output = power/261 
-                return f'the power generated by {name} can power San Francisco for {output} hours\n'
+            output = power/kwh
+            return f'the power generated by {ast_name} can power {country} for {output} hours\n'
         except TypeError:
             return "Make sure the city name is correct\n" 
     except TypeError:
         return "Make sure asteroid name is correct\n" 
+
+@app.route('/<string:ast_name>/position', methods=['GET'])
+def position(ast_name: str):
+    ast_name= str.title(ast_name)
+    try:
+        asteroid = spec_ast(ast_name)
+        kepelements = {"Eccentricity": asteroid['e'], "Semimajor axis": asteroid['a'] , "Inclination": asteroid['i'], "Longitude of the ascending node": asteroid['om'] , "Argument of periapsis": asteroid['w'] }
+        return {f"Keplerian Elements of {ast_name}": kepelements}
+    except:
+        return 'Make sure data is posted'
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
