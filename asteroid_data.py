@@ -306,7 +306,7 @@ def compare(ast_name: str, ast2_name: str) -> str:
     luminosity1 = 4*math.pi*(radius1**2)*boltzman*(temp1 ** 4)
     luminosity2 = 4*math.pi*(radius2**2)*boltzman*(temp2 ** 4)
 
-    moid_ld1 = round(float(asteroid1['moid_ld']) * (1.496*(10**8))/9.461e+12,5) #light years 
+    moid_ld1 = round(float(asteroid1['moid_ld']) * (1.496*(10**8))/9.461e+12,6) #light years 
     moid_ld2 = round(float(asteroid2['moid_ld']) * (1.496*(10**8))/9.461e+12,5) #light years
 
     if diameter1 >= diameter2:
@@ -331,7 +331,7 @@ def compare(ast_name: str, ast2_name: str) -> str:
         temp_str = f'The temprature of {ast2_name} is {temp_diff} Kelvin higher than {ast_name}\n'
     
     if moid_ld1 >= moid_ld2: 
-        moid_diff = round((moid_ld1 - moid_ld2)/1.496e+8,3)
+        moid_diff = round((moid_ld1 - moid_ld2)/1.496e+8,6)
         moid_str = f'{ast2_name} is {moid_ld2} AU from earth and is {moid_diff} AU closer than {ast_name}\n'
     else: 
         moid_diff = ((moid_ld2 - moid_ld1)/1.496e+8) 
