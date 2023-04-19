@@ -233,5 +233,51 @@ def position(ast_name: str):
     except:
         return 'Make sure data is posted'
 
+@app.route('/<string:ast_name>/compare/<string:ast2_name>', methods=['GET'])
+def compare(ast_name: str, ast2_name: str):
+    ast_name = str.title(ast_name) 
+    ast2_name = str.title(ast2_name)  
+
+    asteroid1 = spec_ast(ast_name)
+    asteroid2 = spec_ast(ast2_name)
+    s_knot = 1376 #w/m^2
+    albedo1 = float(asteroid1['albedo'])
+    albedo2 = float(asteroid2['albedo'])
+    boltzman = 5.67 * (10**-8)
+    temp1 = float(((s_knot*(1-albedo1))/(4*boltzman)) ** (1/4))
+    temp2 = float(((s_knot*(1-albedo2))/(4*boltzman)) ** (1/4))
+
+    diameter1 = float(asteroid1['diameter'])
+    diameter2 = float(asteroid2['diameter']) 
+    radius1 = diameter1/2
+    radius2 = diameter2/2
+    luminosity1 = 4*math.pi*(radius1**2)*boltzman*(temp1 ** 4)
+    luminosity2 = 4*math.pi*(radius2**2)*boltzman*(temp2 ** 4)
+
+    if diameter1 >= diameter2:
+        dia_diff = diameter1-diameter2
+        dia_str = f'The diameter of {ast_name} is {dia_diff} kilometers larger than {ast2_name}\n'
+    else:
+        dia_diff = diameter2-diameter1
+        dia_str = f'The diameter of {ast2_name} is {dia_diff} kilometers larger than {ast_name}\n' 
+
+    if luminosity1 >= luminosity2: 
+        lumin_diff = luminosity1-luminosity2
+        lumin_str = f'The luminosity of {ast_name} is {lumin_diff} Watts higher than {ast2_name}\n' 
+    else: 
+        lumin_diff = luminosity2-luminosity1
+        lumin_str = f'The luminosity of {ast2_name} is {lumin_diff} Watts higher than {ast_name}\n'
+
+    if temp1 >= temp2: 
+        temp_diff = temp1-temp2
+        temp_str = f'The temprature of {ast_name} is {temp_diff} Kelivn higher than {ast2_name}\n' 
+    else: 
+        temp_diff = temp2-temp1
+        temp_str = f'The temprature of {ast2_name} is {temp_diff} Kelivn higher than {ast_name}\n'
+    
+
+    return dia_str + lumin_str + temp_str  
+
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
