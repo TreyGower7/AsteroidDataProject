@@ -270,7 +270,7 @@ def position(ast_name: str) -> dict:
     ast_name= str.title(ast_name)
     try:
         asteroid = spec_ast(ast_name)
-        kepelements = {"Eccentricity": asteroid['e'], "Semimajor axis": asteroid['a'] , "Inclination": asteroid['i'], "Longitude of the ascending node": asteroid['om'] , "Argument of periapsis": asteroid['w'] }
+        kepelements = {"Eccentricity": asteroid['e'], "Semimajor axis": asteroid['a'] , "Inclination": asteroid['i'], "Longitude of the ascending node": asteroid['om'] , "Argument of periapsis": asteroid['w'], "Distance from Earth (AU)": asteroid['moid_ld']}
         return {f"Keplerian Elements of {ast_name}": kepelements}
     except:
         return 'Make sure data is posted'
@@ -296,6 +296,9 @@ def compare(ast_name: str, ast2_name: str):
     luminosity1 = 4*math.pi*(radius1**2)*boltzman*(temp1 ** 4)
     luminosity2 = 4*math.pi*(radius2**2)*boltzman*(temp2 ** 4)
 
+    moid_ld1 = float(asteroid1['moid_ld']) * (1.496*(10**8)) 
+    moid_ld2 = float(asteroid2['moid_ld']) * (1.496*(10**8))
+
     if diameter1 >= diameter2:
         dia_diff = diameter1-diameter2
         dia_str = f'The diameter of {ast_name} is {dia_diff} kilometers larger than {ast2_name}\n'
@@ -317,8 +320,14 @@ def compare(ast_name: str, ast2_name: str):
         temp_diff = temp2-temp1
         temp_str = f'The temprature of {ast2_name} is {temp_diff} Kelivn higher than {ast_name}\n'
     
+    if moid_ld1 >= moid_ld2: 
+        moid_diff = moid_ld1 - moid_ld2
+        moid_str = f'{ast2_name} is {moid_ld2} kilometers from earth and is {moid_diff} closer than {ast_name}\n'
+    else: 
+        moid_diff = moid_ld2 - moid_ld1  
+        moid_str = f'{ast_name} is {moid_ld1} kilometers from earth and is {moid_diff} kilometers closer than {ast2_name}\n'
 
-    return dia_str + lumin_str + temp_str  
+    return dia_str + lumin_str + temp_str + moid_str 
 
 
 if __name__ == '__main__':
