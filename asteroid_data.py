@@ -103,7 +103,14 @@ def spec_ast(ast_name: str) -> dict:
         return f'invalid asteroid name or no data found with error\n'
 
 @app.route('/image', methods=['GET','DELETE','POST'])
-def image():
+def image() -> str:
+    """
+    Takes user input and generates a graph based on the data the user wants plotted
+    args:
+        a string specifying a key to access data corresponding to that key
+    returns:
+        a string ensuring the graph was made or deleted
+    """
     if request.method == 'POST':   
        # try:
         plot_data = data()
@@ -144,7 +151,14 @@ def image():
         return "Graph was deleted\n"
 
 @app.route('/<string:ast_name>/temp', methods=['GET'])
-def temp(ast_name: str):
+def temp(ast_name: str) -> dict:
+    """
+    Calculates Temperature of a specific asteroid
+    args:
+        ast_name which specifies an asteroid
+    returns:
+        A dictionary with the temperature of the asteroid and the units in kelvin
+    """
     ast_name= str.title(ast_name)
     try:
         asteroid = spec_ast(ast_name)
@@ -158,7 +172,14 @@ def temp(ast_name: str):
         return "Make sure asteroid name is correct\n" 
 
 @app.route('/<string:ast_name>/luminosity', methods=['GET'])
-def lumin(ast_name: str):
+def lumin(ast_name: str) -> str:
+    """
+    Calculates Luminosity of a specific asteroid
+    args:
+        ast_name which specifies an asteroid
+    returns:
+        a string with the asteroids name and luminosity
+    """
     ast_name= str.title(ast_name)
     try:
         asteroid = spec_ast(ast_name)
@@ -174,7 +195,14 @@ def lumin(ast_name: str):
         return "Make sure asteroid name is correct\n"
 
 @app.route('/<string:ast_name>/visibility', methods=['GET'])
-def visibility(ast_name: str):
+def visibility(ast_name: str) -> str:
+    """
+    Calculates the visibility of a specific asteroid based on the magnitude parameter H
+    args:
+        ast_name which specifies an asteroid
+    returns:
+        A string giving information on what device you need to see the asteroid
+    """
     ast_name= str.title(ast_name)
     try: 
         asteroid = spec_ast(ast_name) 
@@ -189,7 +217,14 @@ def visibility(ast_name: str):
         return "Make sure asteroid name is correct\n" 
 
 @app.route('/<string:ast_name>/power/<string:country>', methods=['GET'])
-def power(ast_name: str, country:str):
+def power(ast_name: str, country:str) -> str:
+    """
+    Calculates power output of a specific asteroid and compares to powering a country
+    args:
+        ast_name which specifies an asteroid
+    returns:
+        A string detailing how many hours a specific asteroid could power a country
+    """
     ast_name= str.title(ast_name)
     country= str.title(country)
     kwh = 0
@@ -224,7 +259,14 @@ def power(ast_name: str, country:str):
                     continue
 
 @app.route('/<string:ast_name>/position', methods=['GET'])
-def position(ast_name: str):
+def position(ast_name: str) -> dict:
+    """
+    Gives Keplerian Elements and the positional data from earth
+    args:
+        ast_name which specifies an asteroid
+    returns:
+        a dictionary of the elements
+    """
     ast_name= str.title(ast_name)
     try:
         asteroid = spec_ast(ast_name)
