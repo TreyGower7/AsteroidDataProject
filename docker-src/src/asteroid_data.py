@@ -35,7 +35,7 @@ def data():
     """
 
     if request.method == 'POST':
-        url = 'https://raw.githubusercontent.com/TreyGower7/AsteroidDataProject/main/ModifiedAsteroidData.csv'
+        url = 'https://raw.githubusercontent.com/TreyGower7/AsteroidDataProject/main/used-data/ModifiedAsteroidData.csv'
         response = requests.get(url)
         if response.status_code == 200:
             content = response.content.decode('utf-8')
@@ -233,7 +233,7 @@ def power(ast_name: str, country:str) -> str:
     except TypeError:
         return "Make sure asteroid name is correct\n"
     try:
-        url = 'https://raw.githubusercontent.com/TreyGower7/AsteroidDataProject/main/API_EG.USE.ELEC.KH.PC_DS2_en_xml_v2_5362092.xml'
+        url = 'https://raw.githubusercontent.com/TreyGower7/AsteroidDataProject/main/used-data/API_EG.USE.ELEC.KH.PC_DS2_en_xml_v2_5362092.xml'
         response = requests.get(url)
         if response.status_code == 200:
             data = xmltodict.parse(response.text)
