@@ -15,13 +15,18 @@ def execute_job(jid):
     returns:
         a string ensuring the graph was made or deleted
     """
-    jobs.update_job_status(jid, "In Progress")
-    try:
+    update_job_status(jid, "In Progress")
+    try: 
+     
         plot_data = json.loads(rd.get('ast_data'))  
         lists = []
         sorted_data = sorted(plot_data, key=lambda x: float(x['moid_ld']))
         for x in range(len(sorted_data)):
-    	    lists.append(float(sorted_data[x]['moid_ld']))
+            lists.append(float(sorted_data[x]['moid_ld']))
+        
+        if lists == []:
+            update_job_status(jid, "Error") 
+            return 0
         try:
             jobdata = rdjobs.hgetall(jid)
             limit = jobdata['end'] 
@@ -34,7 +39,10 @@ def execute_job(jid):
                     result.append(lists[x]) 
         except ValueError: 
             return "Make sure the number closest and farthest values are numbers\n"  
-        
+        if result == []: 
+            update_job_status(jid, "error")
+            return 0
+
         split = (limit - start)/5 
         range1 = [start,start+split] 
         range2 = [start+split, start+(split+split)] 
@@ -56,12 +64,15 @@ def execute_job(jid):
         ax.set_xlabel('Distance from Earth (AU)')
         ax.set_ylabel('Number of Asteroids') 
         ax.set_title('Number of Asteroids a certain Distance from earth') 
-        plt.savefig('asteroid_graph.png')
-        with open('./asteroid_graph.png', 'rb') as f:
-            file_bytes = f.read()
-        rdimg.hset(f'job.{jid}', "image", file_bytes)
+        plt.savefig('./asteroid_graph.png')
+        with open('./asteroid_graph.png', 'rb') as f: 
+            img = f.read() 
+        rdimg.hset(f'job.{jid}', "image", img) 
         rdjobs.hset(f'job.{jid}', 'status', 'finished')
-        jobs.update_job_status(jid, "finished")
+        update_job_status(jid, "finished")
+
+        time.sleep(5) 
+        update_job_status(jid, 'complete') 
     except:
         return 'Load Data\n'
 
