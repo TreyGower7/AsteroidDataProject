@@ -26,19 +26,28 @@ def help() -> str:
 
     """
     get_help = """Usage:  curl [Localhost ip]:5000/[Path]\n
-            A general utility for iss_tracking and paths\n
+            A general utility for Asteroid Statistics and paths\n
 Path Options:\n
 
-Paths:
-           API Path:          Type:       Description of Path:\n 
-            (1) /data           GET         Retrives all data for all asteroids\n
+Data Paths:
+        API Path:          Type:       Description of Path:\n 
+            (1) /data           GET         Retrieves all data for all asteroids\n
             (2) /data           POST        upload data to database\n
             (3) /data           DELETE      Deletes all data in the database\n
-           Job Paths:\n
-            (1) /jobs/graph   GET         Submits a job to the queue for graping data\n
-            (1) /jobs/delete  DELETE      Delete a job from the queue for graping data\n
-
-
+            (4) /asteroids      GET         Retrieves all asteroid names in the database\n
+  (5) /spec_ast/<ast_name>      GET         Retrieves all data given a specific asteroid\n\n 
+Paths that calculate special attributes:\n
+            (1) /<ast_name>/temp              GET         Calculates tempurature of a specific asteroid\n
+            (2) /<ast_name>/lumin             GET         Calculates luminosity of a specific asteroid\n
+            (3) /<ast_name>/visibility        GET         Calculates visibility of a specific asteroid\n
+        (3) /<ast_name>/compare/<ast2_name>   GET         Compares properties of two given asteroids\n
+        (4) /ast_name>/power/<country>        GET         Calculates power supplied to a country from a specific asteroid\n\n
+Job Paths:\n
+            (1) /jobs           GET         Retrieves job id's from the queue\n
+            (2) /jobs           POST        Submits a job to the queue for graping data\n
+            (3) /jobs/delete    DELETE      Delete a job from the queue for graping data\n
+            (4) /jobs/<jid>     GET         Retrieves data pertaining to a specific job id\n
+            (4) /download/<jid> GET         Downloads the image from the database\n\n
 ***End Help Section For Asteroid Stats***\n"""
     return get_help
 
@@ -60,7 +69,7 @@ def run_jobs():
     """
     if request.method == "POST": 
         try:
-            start = int(request.args.get('start', 0))
+            start = int(request.args.get('start', 300))
             end = int(request.args.get('end', 1000))
             if start < 300 or start > 1000 or end < 300 or end > 1000:
                 return "There are no asteroids closer than 300 AU or farther than 1000 AU\n"
@@ -69,7 +78,7 @@ def run_jobs():
         except Exception as e:
             return json.dumps({'status': "Error", 'message': 'Invalid JSON: {}.'.format(e)})
         json.dumps(jobs.add_job(start, end))
-        return f'Job submitted to the queue\n'
+        return f'Job submitted to the queue! Use this path using GET to see posted jobs\n'
     else:
         return rdjobs.keys()
 
@@ -94,9 +103,31 @@ def delete_job():
         else:
             return 'Job id entered was not found\n'
     else:
-        return "This is a route for DELETE-ing former jobs. Use the form: curl -X DELETE -d 'jid=asdf1234' localhost:5000/delete. Use -d 'jid=ALL' to delete all jobs.\n"
+        return "This is a route for DELETE-ing former jobs. Use the form: curl -X DELETE -d 'jid=asdf1234' localhost:5000/jobs/delete. Use -d 'jid=ALL' to delete all jobs.\n"
 
+@app.route('/jobs/<jid>', methods=['GET'])
+def get_job_output(jid):
+    bytes_dict = rdjobs.hgetall(jid)
+    final_dict = {}
+    for key, value in bytes_dict.items():
+        if key == 'result':
+            final_dict[key] = json.loads(value)
+        elif key == 'image':
+            final_dict[key] = 'ready'
+        else:
+            final_dict[key] = value
+    final=json.dumps(final_dict, indent=4)
+    if final != {}:
+        return final
+    else:
+        return 'No Jobs currently posted\n'
 
+@app.route('/download/<jid>', methods=['GET'])
+def download(jid: str) -> str:
+    path = f'./{jid}.png'
+    with open(path, 'wb') as f:
+        f.write(rdimg.hget(jid, 'image'))
+    return send_file(path, mimetype='image/png', as_attachment=True)
 
 #end jobs stuff here
 
@@ -366,29 +397,6 @@ def compare(ast_name: str, ast2_name: str) -> str:
         moid_str = f'{ast_name} is {moid_ld1} AU from earth and is {moid_diff} AU closer than {ast2_name}\n'
 
     return dia_str + lumin_str + temp_str + moid_str 
-
-@app.route('/jobs/<jobuuid>', methods=['GET'])
-def get_job_output(jobuuid):
-    bytes_dict = rdjobs.hgetall(jobuuid)
-    final_dict = {}
-    for key, value in bytes_dict.items():
-        if key == 'result':
-            final_dict[key] = json.loads(value)
-        elif key == 'image':
-            final_dict[key] = 'ready'
-        else:
-            final_dict[key] = value
-    return json.dumps(final_dict, indent=4)    
-
-@app.route('/download/<job_id>', methods=['GET'])
-def download(job_id: str) -> str:
-    #try:
-    path = './asteroid_graph.png'
-    with open(path, 'wb') as f:
-        f.write(rdimg.hget(job_id, 'image'))
-        return send_file(path, mimetype='image/png', as_attachment=True)
-    #except TypeError:
-        return "Post the data first and then post the image to use this function\n"
 
 
 if __name__ == '__main__':
