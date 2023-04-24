@@ -369,8 +369,16 @@ def compare(ast_name: str, ast2_name: str) -> str:
 
 @app.route('/jobs/<jobuuid>', methods=['GET'])
 def get_job_output(jobuuid):
-    bytes_dict = rd.hgetall(jobuuid)
-    return json.dumps(bytes_dict, indent=4)
+    bytes_dict = rdjobs.hgetall(jobuuid)
+    final_dict = {}
+    for key, value in bytes_dict.items():
+        if key == 'result':
+            final_dict[key] = json.loads(value)
+        elif key == 'image':
+            final_dict[key] = 'ready'
+        else:
+            final_dict[key] = value
+    return json.dumps(final_dict, indent=4)    
 
 @app.route('/download/<job_id>', methods=['GET'])
 def download(job_id: str) -> str:
