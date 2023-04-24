@@ -12,8 +12,9 @@ rdjobs = redis.Redis(host= redis_ip, port=6379, db=2, decode_responses=True)
 q = HotQueue("queue", host= redis_ip, port=6379, db=3)
 
 def get_job_by_id(jid):
-    jid, status, start, end = rdjobs.hmget(generate_job_key(jid), 'jid', 'status', 'start', 'end') 
-    job = _instantiate_job(jid, status, start, end)
+    #jid, status, start, end = rdjobs.hmget(generate_job_key(jid), 'jid', 'status', 'start', 'end') 
+    #job = _instantiate_job(jid, status, start, end) 
+    job = rdjobs.hgetall(generate_job_key(jid)) 
     return job
 
 def _generate_jid():
@@ -29,7 +30,7 @@ def generate_job_key(jid):
     """
     return 'job.{}'.format(jid)
 
-def _instantiate_job(jid, status, start, end):
+def _instantiate_job(jid: str, status: str, start: str, end: str):
     """
     Create the job object description as a python dictionary. Requires the job id, status,
     start and end parameters.
@@ -40,11 +41,11 @@ def _instantiate_job(jid, status, start, end):
               'start': start,
               'end': end
         }
-    return {'id': jid.decode('utf-8'),
-          'status': status.decode('utf-8'),
-          'start': start.decode('utf-8'),
-          'end': end.decode('utf-8')
-    }
+    #return {'id': jid.decode('utf-8'),
+    #      'status': status.decode('utf-8'),
+    #      'start': start.decode('utf-8'),
+    #      'end': end.decode('utf-8')
+    #}
 
 def _save_job(job_key, job_dict):
     """Save a job object in the Redis database."""
@@ -52,7 +53,7 @@ def _save_job(job_key, job_dict):
 
 def _queue_job(jid):
     """Add a job to the redis queue."""
-    q.put(jid)
+    q.put(jid) 
 
 def add_job(start, end, status="submitted"):
     """Add a job to the redis queue."""
