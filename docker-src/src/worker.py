@@ -15,8 +15,7 @@ def execute_job(jid):
     returns:
         a string ensuring the graph was made or deleted
     """
-    update_job_status(jid, "In Progress")
-
+    jobs.update_job_status(jid, "In Progress")
     try:
         plot_data = json.loads(rd.get('ast_data'))  
         lists = []
@@ -35,6 +34,7 @@ def execute_job(jid):
                     result.append(lists[x]) 
         except ValueError: 
             return "Make sure the number closest and farthest values are numbers\n"  
+        
         split = (limit - start)/5 
         range1 = [start,start+split] 
         range2 = [start+split, start+(split+split)] 
@@ -57,15 +57,13 @@ def execute_job(jid):
         ax.set_ylabel('Number of Asteroids') 
         ax.set_title('Number of Asteroids a certain Distance from earth') 
         plt.savefig('asteroid_graph.png')
-        file_bytes = open('./asteroid_graph.png', 'rb').read()
-        
-        rdimg.set('image', file_bytes)
-        return 'Image is Posted\n'
-    except TypeError: 
-        return "Make sure the data has been posted\n" 
-    except NameError:
-        return "Make sure the data has been posted\n"
-    
-    update_job_status(jid, "Completed")
+        with open('./asteroid_graph.png', 'rb') as f:
+            file_bytes = f.read()
+        rdimg.hset(f'job.{jid}', "image", file_bytes)
+        rdjobs.hset(f'job.{jid}', 'status', 'finished')
+        jobs.update_job_status(jid, "finished")
+    except:
+        return 'Load Data\n'
 
-execute_job()
+if __name__ == '__main__':
+    execute_job()
