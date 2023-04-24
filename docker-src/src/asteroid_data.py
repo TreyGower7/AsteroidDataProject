@@ -178,8 +178,6 @@ def spec_ast(ast_name: str) -> dict:
     except TypeError:
         return f'invalid asteroid name or no data found with error\n'
 
-<<<<<<< HEAD
-=======
 @app.route('/image', methods=['POST'])
 def image() -> str:
     """
@@ -255,7 +253,6 @@ def del_image() -> str:
         rd2.delete('key') 
         return "Graph was deleted\n"
 
->>>>>>> e53093cbd8ad9393fd2660462d95edc507930373
 @app.route('/<string:ast_name>/temp', methods=['GET'])
 def temp(ast_name: str) -> dict:
     """
