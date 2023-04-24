@@ -8,21 +8,99 @@ import matplotlib.pyplot as plt
 import numpy as np
 import math 
 import xmltodict
+import datetime
+from jobs import rd, q, rdimg, rdjobs, add_job, generate_job_key
+import jobs
 
 app = Flask(__name__)
 
-def get_redis_client():
-    """
-    Gets the redis client
+#Help Route
+@app.route('/help', methods=['GET'])
+def help() -> str:
+    """Provides a manual for the user
+
     Args:
         None
     Returns:
-        the redis client with host redis_host in order to interact and get from the os to work with docker and k8s
+        Help string with useful path data
+
     """
-    redis_ip = os.environ.get("REDIS_HOST")
-    return redis.Redis(host= redis_ip, port=6379,db=0, decode_responses=True)
-rd = get_redis_client()
-rd2 = redis.Redis(host = os.environ.get("REDIS_HOST"), port=6379, db=1) 
+    get_help = """Usage:  curl [Localhost ip]:5000/[Path]\n
+            A general utility for iss_tracking and paths\n
+Path Options:\n
+
+Paths:
+           API Path:          Type:       Description of Path:\n 
+            (1) /data           GET         Retrives all data for all asteroids\n
+            (2) /data           POST        upload data to database\n
+            (3) /data           DELETE      Deletes all data in the database\n
+           Job Paths:\n
+            (1) /jobs/graph   GET         Submits a job to the queue for graping data\n
+            (1) /jobs/delete  DELETE      Delete a job from the queue for graping data\n
+
+
+***End Help Section For Asteroid Stats***\n"""
+    return get_help
+
+#all the jobs stuff below
+
+@app.route('/jobs', methods= ['POST','GET'])
+def run_jobs():
+    """
+    This route post asteroids to be run
+    args:
+        None
+    Query Parameters:
+        ast_start: what asteroid to start with for the image data
+        ast_end: what asteroid to end with for the image data
+    Curl:
+        "localhost:5000/jobs/graph?start=&end=" keep the parenthesis 
+    Returns: 
+        an added job to the queue
+    """
+    if request.method == "POST": 
+        try:
+            start = int(request.args.get('start', 0))
+            end = int(request.args.get('end', 1000))
+            if start < 300 or start > 1000 or end < 300 or end > 1000:
+                return "There are no asteroids closer than 300 AU or farther than 1000 AU\n"
+            if end < start:
+                return "The farthest value is lower than the closest value, this can't happen try again with different values\n"
+        except Exception as e:
+            return json.dumps({'status': "Error", 'message': 'Invalid JSON: {}.'.format(e)})
+        json.dumps(jobs.add_job(start, end))
+        return f'Job submitted to the queue\n'
+    else:
+        return rdjobs.keys()
+
+@app.route('/jobs/delete', methods=['GET','DELETE'])
+def delete_job():
+    if request.method =="DELETE":
+        job = request.form['jid']
+        keys = rdjobs.keys()
+        if job in keys or job == "All": 
+            if job == "All":
+                rdjobs.flushdb()
+                file_list = os.listdir('.')
+                for item in file_list:
+                    if item.endswith('.png'):
+                        os.remove(item)
+                return 'All jobs deleted\n'
+            else:
+                rdjobs.delete(job)
+                if os.path.exists(f'{job}.png'):
+                    os.remove(f'{job}.png')
+            return f'Job {job} deleted\n'
+        else:
+            return 'Job id entered was not found\n'
+    else:
+        return "This is a route for DELETE-ing former jobs. Use the form: curl -X DELETE -d 'jid=asdf1234' localhost:5000/delete. Use -d 'jid=ALL' to delete all jobs.\n"
+
+
+
+#end jobs stuff here
+
+#Other Flask Routes Start Here
 
 @app.route('/data', methods=['GET', 'POST', 'DELETE'])
 def data():
@@ -62,7 +140,6 @@ def data():
             return 'Asteroid Data deleted\n'
         except NameError:
             return 'Data already deleted\n'
-#Other Flask Routes Start Here
 
 @app.route('/asteroids', methods=['GET'])
 def asteroids() -> list:
@@ -101,54 +178,6 @@ def spec_ast(ast_name: str) -> dict:
         raise TypeError
     except TypeError:
         return f'invalid asteroid name or no data found with error\n'
-
-@app.route('/image', methods=['GET','DELETE','POST'])
-def image() -> str:
-    """
-    Takes user input and generates a graph based on the data the user wants plotted
-    args:
-        a string specifying a key to access data corresponding to that key
-    returns:
-        a string ensuring the graph was made or deleted
-    """
-    if request.method == 'POST':   
-       # try:
-        plot_data = data()
-        H = []
-        name = []
-        counter = 0 
-        sorted_data = sorted(plot_data, key=lambda x: float(x['H']), reverse=False) 
-        for counter in range(len(sorted_data)): 
-            H.append(sorted_data[counter]['H'])
-            name.append(sorted_data[counter]['name']) 
-            if counter == 10: 
-                break 
-        plt.figure(figsize=(10,10))
-        plt.scatter(name,H) 
-        plt.xlabel('Names of asteroid') 
-        plt.ylabel('H (Brightness)') 
-        plt.title('Lowest 10 Brightness of the asteroids')
-        plt.savefig('asteroid_graph.png')
-        file_bytes = open('./asteroid_graph.png', 'rb').read()
-        rd2.set('key', file_bytes)
-        return "Image is posted\n" 
-       # except TypeError: 
-         #   return "Make sure the data has been posted\n" 
-       # except NameError:
-        #    return "Make sure the data has been posted\n"
-
-    if request.method == 'GET':
-        try:
-            path = './asteroid_graph.png'
-            with open(path, 'wb') as f: 
-                f.write(rd2.get('key'))
-            return send_file(path, mimetype='image/png', as_attachment=True) 
-        except TypeError:
-            return "Post the data first and then post the image to use this function\n"
-
-    if request.method == 'DELETE': 
-        rd2.delete('key') 
-        return "Graph was deleted\n"
 
 @app.route('/<string:ast_name>/temp', methods=['GET'])
 def temp(ast_name: str) -> dict:
@@ -338,6 +367,21 @@ def compare(ast_name: str, ast2_name: str) -> str:
         moid_str = f'{ast_name} is {moid_ld1} AU from earth and is {moid_diff} AU closer than {ast2_name}\n'
 
     return dia_str + lumin_str + temp_str + moid_str 
+
+@app.route('/jobs/<jobuuid>', methods=['GET'])
+def get_job_output(jobuuid):
+    bytes_dict = rd.hgetall(jobuuid)
+    return json.dumps(bytes_dict, indent=4)
+
+@app.route('/download/<job_id>', methods=['GET'])
+def download(job_id: str) -> str:
+    #try:
+    path = './asteroid_graph.png'
+    with open(path, 'wb') as f:
+        f.write(rdimg.hget(job_id, 'image'))
+        return send_file(path, mimetype='image/png', as_attachment=True)
+    #except TypeError:
+        return "Post the data first and then post the image to use this function\n"
 
 
 if __name__ == '__main__':
