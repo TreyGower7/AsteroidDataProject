@@ -13,22 +13,20 @@ services:
     flask-app:
         build:
             context: ./
-            dockerfile: ${PWD}/Dockerfile
+            dockerfile: ./Dockerfile
         depends_on:
            - redis-db
-        image: jetp104/asteroid_stats:final
+        image: tagower/asteroid_stats:final
         ports:
            - 5000:5000
         environment:
            - REDIS_HOST=redis-db
-    asteroid-wrk:
+    worker-app:
         build:
             context: ./
-            dockerfile: ${PWD}/Dockerfile.wrk
+            dockerfile: ./Dockerfile.wrk
         depends_on:
            - redis-db
-        image: jetp104/asteroid_worker:final
-        ports:
-                - 6441:6379 
+        image: tagower/asteroid_worker:final
         environment:
            - REDIS_HOST=redis-db
