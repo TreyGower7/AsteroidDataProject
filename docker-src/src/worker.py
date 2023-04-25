@@ -63,25 +63,15 @@ def execute_job(jid):
 
         plt.savefig('asteroid_graph.png')
         file_bytes = open('./asteroid_graph.png', 'rb').read()
-     
         rdimg.hset(f'job.{jid}', "image", file_bytes) 
     
-
-
-        plt.savefig('./asteroid_graph.png')
-        file_bytes = open('./asteroid_graph.png', 'rb').read()
-        rdimg.hset(f'job.{jid}', "image", file_bytes) 
-
    
         update_job_status(jid, "finished")
 
         time.sleep(5) 
         update_job_status(jid, 'complete') 
     except:
-
         return 'Load Asteroids Data\n'
-
-        return 'Load Data then rerun this route\n'
 
 
 if __name__ == '__main__':
