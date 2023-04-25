@@ -67,7 +67,12 @@ def run_jobs():
     Returns: 
         an added job to the queue
     """
-    if request.method == "POST": 
+    if request.method == "POST":
+        check = rd.get('ast_data') 
+
+        if check is None: 
+            return "You must first post the asteroid data to post a job\n" 
+
         try:
             start = int(request.args.get('start', 300))
             end = int(request.args.get('end', 1000))
