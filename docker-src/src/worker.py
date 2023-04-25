@@ -89,7 +89,7 @@ def execute_job(jid):
 # Set the title of the plot
     #ax.set_title('Simple Plot') 
 
-    plt.savefig('./asteroid_graph.png')
+    plt.savefig('asteroid_graph.png')
     file_bytes = open('./asteroid_graph.png', 'rb').read()
     #with open('/asteroid_graph.png', 'rb') as f: 
     #    img = f.read() 
