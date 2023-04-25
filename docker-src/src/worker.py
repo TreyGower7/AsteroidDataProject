@@ -50,10 +50,8 @@ def execute_job(jid):
         count4 = len([i for i in result if range4[0] <= i <= range4[1]])
         count5 = len([i for i in result if range5[0] <= i <= range5[1]])
     
-<<<<<<< HEAD
-    
-=======
->>>>>>> 1461b0e440e70eb49e8d0bd356dc5f718990011a
+
+
         fig, ax = plt.subplots()
         ax.bar([1,2,3,4,5],[count1, count2, count3, count4, count5])
         ax.set_xticks([1, 2, 3, 4, 5])
@@ -61,8 +59,6 @@ def execute_job(jid):
         ax.set_xlabel('Distance from Earth (AU)')
         ax.set_ylabel('Number of Asteroids') 
         ax.set_title('Number of Asteroids a certain Distance from earth') 
-        
-<<<<<<< HEAD
     
 
         plt.savefig('asteroid_graph.png')
@@ -70,24 +66,23 @@ def execute_job(jid):
      
         rdimg.hset(f'job.{jid}', "image", file_bytes) 
     
-=======
+
 
         plt.savefig('./asteroid_graph.png')
         file_bytes = open('./asteroid_graph.png', 'rb').read()
         rdimg.hset(f'job.{jid}', "image", file_bytes) 
 
->>>>>>> 1461b0e440e70eb49e8d0bd356dc5f718990011a
-    
+   
         update_job_status(jid, "finished")
 
         time.sleep(5) 
         update_job_status(jid, 'complete') 
     except:
-<<<<<<< HEAD
+
         return 'Load Asteroids Data\n'
-=======
+
         return 'Load Data then rerun this route\n'
->>>>>>> 1461b0e440e70eb49e8d0bd356dc5f718990011a
+
 
 if __name__ == '__main__':
     execute_job()
