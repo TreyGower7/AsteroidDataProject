@@ -59,31 +59,10 @@ def execute_job(jid):
         ax.set_title('Number of Asteroids a certain Distance from earth') 
         
 
-<<<<<<< HEAD
         plt.savefig('./asteroid_graph.png')
         file_bytes = open('./asteroid_graph.png', 'rb').read()
         rdimg.hset(f'job.{jid}', "image", file_bytes) 
-=======
-# Create a figure and axis object
-    #fig, ax = plt.subplots()
 
-# Plot the data on the axis
-    #ax.plot(x, y)
-
-# Set the x and y axis labels
-    #ax.set_xlabel('X-axis')
-    #ax.set_ylabel('Y-axis')
-
-# Set the title of the plot
-    #ax.set_title('Simple Plot') 
-
-    plt.savefig('asteroid_graph.png')
-    file_bytes = open('./asteroid_graph.png', 'rb').read()
-    #with open('/asteroid_graph.png', 'rb') as f: 
-    #    img = f.read() 
-    rdimg.hset(f'job.{jid}', "image", file_bytes) 
-    #rdjobs.hset(f'job.{jid}', 'status', 'finished')
->>>>>>> b6d60f6766821f786bbb4b2ff3d8565f7d0facd7
     
         update_job_status(jid, "finished")
 
