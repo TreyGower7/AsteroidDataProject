@@ -41,11 +41,11 @@ def _instantiate_job(jid: str, status: str, start: str, end: str):
               'start': start,
               'end': end
         }
-    #return {'id': jid.decode('utf-8'),
-    #      'status': status.decode('utf-8'),
-    #      'start': start.decode('utf-8'),
-    #      'end': end.decode('utf-8')
-    #}
+    return {'id': jid.decode('utf-8'),
+          'status': status.decode('utf-8'),
+          'start': start.decode('utf-8'),
+          'end': end.decode('utf-8')
+    }
 
 def _save_job(job_key, job_dict):
     """Save a job object in the Redis database."""
