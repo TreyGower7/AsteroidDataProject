@@ -1,0 +1,26 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: asteroid-test-wrk-deployment
+  labels:
+    app: asteroid-test-wrk
+    env: test
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: asteroid-test-wrk
+  template:
+    metadata:
+      labels:
+        app: asteroid-test-wrk
+        env: test
+    spec:
+      containers:
+        - name: asteroid-test-wrk
+          imagePullPolicy: Always
+          image: tagower/asteroid_worker:final
+          env:
+          - name: REDIS_HOST
+            value: "asteroid-test-redis-service"
