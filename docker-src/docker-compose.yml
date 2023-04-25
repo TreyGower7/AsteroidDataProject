@@ -27,6 +27,10 @@ services:
             dockerfile: ./Dockerfile.wrk
         depends_on:
            - redis-db
+<<<<<<< HEAD
         image: tagower/asteroid_worker:final
+=======
+        image: jetp104/asteroid_worker:final
+>>>>>>> b6d60f6766821f786bbb4b2ff3d8565f7d0facd7
         environment:
            - REDIS_HOST=redis-db
