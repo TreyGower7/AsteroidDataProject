@@ -16,7 +16,7 @@ services:
             dockerfile: ./Dockerfile
         depends_on:
            - redis-db
-        image: jetp104/asteroid_stats:final
+        image: tagower/asteroid_stats:final
         ports:
            - 5000:5000
         environment:
@@ -27,6 +27,6 @@ services:
             dockerfile: ./Dockerfile.wrk
         depends_on:
            - redis-db
-        image: jetp104/asteroid_worker:final
+        image: tagower/asteroid_worker:final
         environment:
            - REDIS_HOST=redis-db

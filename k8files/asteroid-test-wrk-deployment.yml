@@ -15,6 +15,7 @@ spec:
     metadata:
       labels:
         app: asteroid-test-wrk
+        username: tagower
         env: test
     spec:
       containers:
