@@ -18,7 +18,10 @@ The goal of this Asteroid project is to create a REST API with flask to store da
 
 
 <!-- TABLE OF CONTENTS -->
-- [About The Asteroid Project](#about-the-asteroid-project)
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+ <li><a[About The Asteroid Project](#about-the-asteroid-project)>
   * [The Files In This Repo](#the-files-in-this-repo)
   * [Built With](#built-with)
 - [Getting Started](#getting-started)
@@ -36,8 +39,8 @@ The goal of this Asteroid project is to create a REST API with flask to store da
 - [The API Can Run From Any Machine!](#the-api-can-run-from-any-machine-)
 - [Contact](#contact)
 - [Acknowledgments](#acknowledgments)
-<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
-
+ </ol>
+</details>
 
 
 
