@@ -95,7 +95,7 @@ is used to capture the docker image for `worker.py`, the file specifies the Pyth
 
 
 ### Built With
-  <img src=https://user-images.githubusercontent.com/70235944/227825420-7601d2a1-d92f-4a0c-9726-92f4e65e7699.png alt="Logo" width="80" height="80">
+  [<img src=https://user-images.githubusercontent.com/70235944/227825420-7601d2a1-d92f-4a0c-9726-92f4e65e7699.png alt="Logo" width="80" height="80">](https://www.google.com/)
   <img src=https://user-images.githubusercontent.com/70235944/227826270-c253f2a4-c294-4146-bb7d-17f9cf0e4f24.png alt="Logo" width="80" height="80">
   <img src=https://user-images.githubusercontent.com/70235944/227825491-6821ba07-4561-4f6b-8b72-62d53eab346b.png alt="Logo" width="80" height="80">
 <img src=https://user-images.githubusercontent.com/70235944/234373495-83ac1167-d13f-4840-9c7e-ec3c8d96d4d9.png alt="Logo" width="80" height="80">
