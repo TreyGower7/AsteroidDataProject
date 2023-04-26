@@ -15,6 +15,11 @@ import jobs
 app = Flask(__name__)
 
 #Help Route
+@app.route('/', methods=['GET'])
+def main_api() -> str:
+    info = help()
+    return info
+
 @app.route('/help', methods=['GET'])
 def help() -> str:
     """Provides a manual for the user
@@ -35,19 +40,19 @@ Data Paths:
             (2) /data           POST        upload data to database\n
             (3) /data           DELETE      Deletes all data in the database\n
             (4) /asteroids      GET         Retrieves all asteroid names in the database\n
-  (5) /spec_ast/<ast_name>      GET         Retrieves all data given a specific asteroid\n\n 
+  (5) /asteroids/<ast_name>     GET         Retrieves all data given a specific asteroid\n\n 
 Paths that calculate special attributes:\n
             (1) /<ast_name>/temp              GET         Calculates tempurature of a specific asteroid\n
             (2) /<ast_name>/lumin             GET         Calculates luminosity of a specific asteroid\n
             (3) /<ast_name>/visibility        GET         Calculates visibility of a specific asteroid\n
-        (3) /<ast_name>/compare/<ast2_name>   GET         Compares properties of two given asteroids\n
-        (4) /ast_name>/power/<country>        GET         Calculates power supplied to a country from a specific asteroid\n\n
+        (4) /<ast_name>/compare/<ast2_name>   GET         Compares properties of two given asteroids\n
+        (5) /ast_name>/power/<country>        GET         Calculates power supplied to a country from a specific asteroid\n\n
 Job Paths:\n
             (1) /jobs           GET         Retrieves job id's from the queue\n
             (2) /jobs           POST        Submits a job to the queue for graping data\n
             (3) /jobs/delete    DELETE      Delete a job from the queue for graping data\n
             (4) /jobs/<jid>     GET         Retrieves data pertaining to a specific job id\n
-            (4) /download/<jid> GET         Downloads the image from the database\n\n
+            (5) /download/<jid> GET         Downloads the image from the database\n\n
 ***End Help Section For Asteroid Stats***\n"""
     return get_help
 
