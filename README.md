@@ -48,7 +48,8 @@ The goal of this Asteroid project is to create a REST API with flask to store da
 ## About The Asteroid Project
 This project is based off of asteroid data found on https://www.kaggle.com/datasets/sakhawat18/asteroid-dataset where we 
 took values in the data set and computed some interesting properties. Using this data and constants pulled from astrophysics, we can do calculations such as checking the power output of an asteroid as compared to a country and see the hours of power that country can get. But, the main focus of this project was building the backend and front end of our application with REST API, Kubernetes, Docker, Concurrency and Queues, and much more detailed below.
-    
+
+This project also uses data from World Bank which can be found here https://data.worldbank.org/indicator/EG.USE.ELEC.KH.PC. 
 ### The Files In This Repo
 ***`Scripts:`***
 
@@ -418,6 +419,8 @@ docker ps -a
 <!-- CONTACT -->
 ## The API Can Run From Any Machine!
 **As long as you set up the Nodeport and Ingress in the Kubernetes Section, you are able to run the api's curl commands from any web browser or linux terminal**
+  
+  For example you can run our code from you termianl using the command: `curl tagower.coe332.tacc.cloud/<route>`
 
 
 <p align="right">(<a href="#Mapping The Cosmos">↑ back to top</a>)</p>
