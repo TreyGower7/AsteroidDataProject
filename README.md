@@ -21,7 +21,7 @@ The goal of this Asteroid project is to create a REST API with flask to store da
 <details>
   <summary>Table of Contents</summary>
   <ol>
- <li><a[About The Asteroid Project](#about-the-asteroid-project)>
+- [About The Asteroid Project](#about-the-asteroid-project)>
   * [The Files In This Repo](#the-files-in-this-repo)
   * [Built With](#built-with)
 - [Getting Started](#getting-started)
