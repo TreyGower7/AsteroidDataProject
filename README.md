@@ -414,7 +414,7 @@ docker ps -a
 
 <!-- CONTACT -->
 ## The API Can Run From Any Machine!
-`As long as you set up the Nodeport and Ingress in the Kubernetes Section, you are able to run the api's curl commands from any web browser or linux terminal`
+**As long as you set up the Nodeport and Ingress in the Kubernetes Section, you are able to run the api's curl commands from any web browser or linux terminal**
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
