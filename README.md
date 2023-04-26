@@ -18,21 +18,26 @@ The goal of this Asteroid project is to create a REST API with flask to store da
 
 
 <!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li><a href="#about-the-project">About The Project</a>
-    <li><a href="#built-with">Built With</a></li>
-    <li><a href="#getting-started">Getting Started</a>
-    <li><a href="#Paths & Routes">Paths & Routes</a></li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#Kubernetes Deployment">Kubernetes Deployment</a></li>
-    <li><a href="#What the data says">What the data says</a></li>
-    <li><a href="#The API Can Run From Any Machine!">The API Can Run From Any Machine!</a></li>
-    <li><a href="#Contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
+- [About The Asteroid Project](#about-the-asteroid-project)
+  * [The Files In This Repo](#the-files-in-this-repo)
+  * [Built With](#built-with)
+- [Getting Started](#getting-started)
+  * [Prerequisites](#prerequisites)
+  * [Pulling a docker image](#pulling-a-docker-image)
+  * [Building a docker image](#building-a-docker-image)
+- [Paths & Routes](#paths---routes)
+- [Usage](#usage)
+- [Kubernetes Deployment](#kubernetes-deployment)
+  * [Using The Provided Image](#using-the-provided-image)
+  * [Building Your Own Image and Adapting The yml](#building-your-own-image-and-adapting-the-yml)
+  * [Running The Deployments](#running-the-deployments)
+  * [Envirnomental variables](#envirnomental-variables)
+- [What the Important data says](#what-the-important-data-says)
+- [The API Can Run From Any Machine!](#the-api-can-run-from-any-machine-)
+- [Contact](#contact)
+- [Acknowledgments](#acknowledgments)
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
 
 
 
