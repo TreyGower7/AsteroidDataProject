@@ -169,7 +169,7 @@ docker ps -a
   docker-compose down
   ```
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#Mapping The Cosmos">↑ back to top</a>)</p>
 
 
 <!-- Paths & Routes -->
@@ -214,7 +214,7 @@ docker ps -a
 |Retrieves data pertaining to a specific job id|
 |(5) /download/{jobid}  | `GET`         |
 |Downloads the image from the database |
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#Mapping The Cosmos">↑ back to top</a>)</p>
  
 
 <!-- USAGE EXAMPLES -->
@@ -278,7 +278,7 @@ docker ps -a
     curl localhost:5000/download/<jobid> --output <desiredname>.png
     ```
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#Mapping The Cosmos">↑ back to top</a>)</p>
   
   <!-- Kubernetes -->
 ## Kubernetes Deployment
@@ -397,7 +397,7 @@ docker ps -a
     value: <The name of your redis service>
   ```
   ***mine uses REDIS_IP="asteroid-test-redis-service"***
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#Mapping The Cosmos">↑ back to top</a>)</p>
     
 <!-- What the data says -->
 ## What the Important data says
@@ -413,14 +413,14 @@ docker ps -a
 
 
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#Mapping The Cosmos">↑ back to top</a>)</p>
 
 <!-- CONTACT -->
 ## The API Can Run From Any Machine!
 **As long as you set up the Nodeport and Ingress in the Kubernetes Section, you are able to run the api's curl commands from any web browser or linux terminal**
 
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#Mapping The Cosmos">↑ back to top</a>)</p>
 
 <!-- CONTACT -->
 ## Contact
@@ -434,7 +434,7 @@ Jordan Burton - jordane.burton@gmail.com
 Project Link: https://github.com/TreyGower7/AsteroidDataProject
 
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#Mapping The Cosmos">↑ back to top</a>)</p>
 
 
 
@@ -445,7 +445,7 @@ Project Link: https://github.com/TreyGower7/AsteroidDataProject
 * "Electric Power Consumption" World Bank Open Data: 
 [https://data.worldbank.org/indicator/EG.USE.ELEC.KH.PC]()
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#Mapping The Cosmos">↑ back to top</a>)</p>
 
 
 
