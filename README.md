@@ -420,7 +420,7 @@ docker ps -a
 ## The API Can Run From Any Machine!
 **As long as you set up the Nodeport and Ingress in the Kubernetes Section, you are able to run the api's curl commands from any web browser or linux terminal**
   
-  For example you can run our code from you termianl using the command: `curl tagower.coe332.tacc.cloud/<route>`
+  For example you can run our code from you terminal using the command: `curl tagower.coe332.tacc.cloud/<route>`
 
 
 <p align="right">(<a href="#Mapping The Cosmos">↑ back to top</a>)</p>
