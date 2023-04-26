@@ -21,24 +21,24 @@ The goal of this Asteroid project is to create a REST API with flask to store da
 <details>
   <summary>Table of Contents</summary>
   
-- [About The Asteroid Project](#about-the-asteroid-project)>
-  * [The Files In This Repo](#the-files-in-this-repo)
-  * [Built With](#built-with)
-- [Getting Started](#getting-started)
-  * [Prerequisites](#prerequisites)
-  * [Pulling a docker image](#pulling-a-docker-image)
-  * [Building a docker image](#building-a-docker-image)
-- [Paths & Routes](#paths---routes)
-- [Usage](#usage)
-- [Kubernetes Deployment](#kubernetes-deployment)
-  * [Using The Provided Image](#using-the-provided-image)
-  * [Building Your Own Image and Adapting The yml](#building-your-own-image-and-adapting-the-yml)
-  * [Running The Deployments](#running-the-deployments)
-  * [Envirnomental variables](#envirnomental-variables)
-- [What the Important data says](#what-the-important-data-says)
-- [The API Can Run From Any Machine!](#the-api-can-run-from-any-machine-)
-- [Contact](#contact)
-- [Acknowledgments](#acknowledgments)
+1. [About The Asteroid Project](#about-the-asteroid-project)>
+  - [The Files In This Repo](#the-files-in-this-repo)
+  - [Built With](#built-with)
+2. [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Pulling a docker image](#pulling-a-docker-image)
+  - [Building a docker image](#building-a-docker-image)
+3. [Paths & Routes](#paths---routes)
+4. [Usage](#usage)
+5. [Kubernetes Deployment](#kubernetes-deployment)
+  - [Using The Provided Image](#using-the-provided-image)
+  - [Building Your Own Image and Adapting The yml](#building-your-own-image-and-adapting-the-yml)
+  - [Running The Deployments](#running-the-deployments)
+  - [Envirnomental variables](#envirnomental-variables)
+6. [What the Important data says](#what-the-important-data-says)
+7. [The API Can Run From Any Machine!](#the-api-can-run-from-any-machine-)
+8. [Contact](#contact)
+9. [Acknowledgments](#acknowledgments)
   
 </details>
 
