@@ -90,7 +90,7 @@ is used to capture the docker image for `worker.py`, the file specifies the Pyth
 
  `asteroid_ingress.yml` - Allows incoming curl commands to the pod from the public
 
-<p align="right">(<a href="#Mapping The Cosmos">🔼 back to top</a>)</p>
+<p align="right">(<a href="#Mapping The Cosmos">↑ back to top</a>)</p>
 
 
 
@@ -100,7 +100,7 @@ is used to capture the docker image for `worker.py`, the file specifies the Pyth
   <img src=https://user-images.githubusercontent.com/70235944/227825491-6821ba07-4561-4f6b-8b72-62d53eab346b.png alt="Logo" width="80" height="80">
 <img src=https://user-images.githubusercontent.com/70235944/234373495-83ac1167-d13f-4840-9c7e-ec3c8d96d4d9.png alt="Logo" width="80" height="80">
 <img src=https://user-images.githubusercontent.com/70235944/234373487-dd6182f6-64ef-4451-b897-374fba0bdf69.png alt="Logo" width="80" height="80">
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#readme-top">↑ back to top</a>)</p>
 
 <!-- GETTING STARTED -->
 ## Getting Started
