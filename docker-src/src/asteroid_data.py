@@ -69,7 +69,6 @@ def run_jobs():
     """
     if request.method == "POST":
         check = rd.get('ast_data') 
-
         if check is None: 
             return "You must first post the asteroid data to post a job\n" 
 
@@ -85,10 +84,22 @@ def run_jobs():
         json.dumps(jobs.add_job(start, end))
         return f'Job submitted to the queue! Use this path using GET to see posted jobs\n'
     else:
-        return rdjobs.keys()
+        check2 = rdjobs.keys()
+        if check2 == []:
+            return 'No Jobs Posted\n'
+        else:    
+            return rdjobs.keys()
 
 @app.route('/jobs/delete', methods=['GET','DELETE'])
 def delete_job():
+    """
+    Deletes a single or all jobs
+
+    Args: 
+        None
+    Returns:
+        the name of the Deleted job
+    """
     if request.method =="DELETE":
         job = request.form['jid']
         keys = rdjobs.keys()
@@ -112,6 +123,14 @@ def delete_job():
 
 @app.route('/jobs/<jid>', methods=['GET'])
 def get_job_output(jid):
+    """
+    Gets details of a specific job
+
+    Args:
+        None
+    Returns:
+        a dictionary of the details (Start, End, Status, id)
+    """
     bytes_dict = rdjobs.hgetall(jid)
     final_dict = {}
     for key, value in bytes_dict.items():
@@ -129,6 +148,14 @@ def get_job_output(jid):
 
 @app.route('/download/<jid>', methods=['GET'])
 def download(jid: str) -> str:
+    """
+    Enables the user to download the image
+
+    Args:
+        The Job id
+    returns:
+        A downloaded image of the graph
+    """
     path = f'./{jid}.png'
     with open(path, 'wb') as f:
         f.write(rdimg.hget(jid, 'image'))
